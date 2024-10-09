@@ -2,7 +2,7 @@ import socket
 
 
 def client_program():
-    host = socket.gethostname()  #se non sono sullo stesso pc come host devo mettere l'ip del server
+    host = "10.243.30.87"  #se non sono sullo stesso pc come host devo mettere l'ip del server (PC DI ILARIA = "10.243.30.87" )
     port = 5000  # socket server port number
 
     client_socket = socket.socket()  # instantiate

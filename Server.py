@@ -1,30 +1,91 @@
 import socket
+import struct  # Per la gestione di variabili binarie
 
+from tkinter import *
+import time
+
+#creazione canvas
+root = Tk()
+root.title("Ball Animation")
+
+screen_width = root.winfo_screenwidth()
+screen_height = root.winfo_screenheight()
+
+print("Larghezza della finestra:", screen_width)
+print("Altezza della finestra:", screen_height)
+
+x_max=screen_width
+y_max=screen_height
+
+
+pos_x = 100
+pos_y = 100
+
+canvas = Canvas(root, height= y_max, width= x_max)
+canvas.pack()
+
+# creazione palla
+ball = canvas.create_oval(10, 10, 50, 50, fill="blue")
+
+# movimento palla
+canvas.moveto(ball, pos_x, pos_y)
+canvas.update()
+
+def move_ball_to(x_nuovo, y_nuovo):
+    x, y = canvas.coords(ball)[:2]
+    canvas.moveto(ball, x_nuovo, y_nuovo)
+    canvas.update()
+    time.sleep(0.01)
+    x, y = canvas.coords(ball)[:2]
+
+
+while True:
+    move_ball_to()
+    again = int(input("Vuoi muovere di nuovo la palla? (1 per sì, 0 per no): "))
+    if again != 1:
+        final_pos = canvas.coords(ball)
+        break
+
+root.mainloop()
+
+# Supponiamo che moveball() sia già definita
+def moveball(x, y):
+    print(f"Moveball chiamata con x = {x}, y = {y}")
+    # Logica di moveball qui (o lascia vuoto se non deve fare nulla in questo esempio)
 
 def server_program():
-    # get the hostname
+    # Ottieni l'hostname
     host = socket.gethostname()
-    port = 5000  # initiate port no above 1024
+    port = 5000  # Porta di ascolto sopra 1024
 
-    server_socket = socket.socket()  # get instance
-    # look closely. The bind() function takes tuple as argument
-    server_socket.bind((host, port))  # bind host address and port together
+    server_socket = socket.socket()  # Crea un'istanza del socket
+    server_socket.bind((host, port))  # Associa l'host e la porta
 
-    # configure how many client the server can listen simultaneously
+    # Configura il numero massimo di client in attesa
     server_socket.listen(1)
-    conn, address = server_socket.accept()  # accept new connection
-    print("Connection from: " + str(address))
-    while True:
-        # receive data stream. it won't accept data packet greater than 1024 bytes
-        data = conn.recv(1024).decode()
-        if not data:
-            # if data is not received break
-            break
-        print("from connected user: " + str(data))
-        data = input(' -> ')
-        conn.send(data.encode())  # send data to the client
+    print(f"Server in attesa di connessioni su {host}:{port}...")
+    conn, address = server_socket.accept()  # Accetta una nuova connessione
+    print("Connessione stabilita con: " + str(address))
 
-    conn.close()  # close the connection
+    while True:
+        # Ricezione dei dati in formato binario (8 byte per due interi)
+        data = conn.recv(8)
+        if not data:
+            # Se non vengono ricevuti dati, esce dal ciclo
+            break
+
+        # Decodifica i dati ricevuti: due interi (x, y)
+        x, y = struct.unpack('ii', data)
+        print(f"Ricevuto dal client: x = {x}, y = {y}")
+
+        # Passa le variabili x e y alla funzione moveball()
+        move_ball_to(x, y)
+
+        # Opzionalmente, invia una conferma al client
+        conn.send(b"Variabili ricevute e funzione moveball() eseguita.")
+
+    # Chiude la connessione
+    conn.close()
 
 
 if __name__ == '__main__':

@@ -1,31 +1,25 @@
 import socket
-import struct
+
 
 def client_program():
-    host = "10.243.30.87"  # IP del server (PC di Ilaria)
-    port = 5000  # Porta del server
+    host = "10.243.30.87"  #se non sono sullo stesso pc come host devo mettere l'ip del server (PC DI ILARIA = "10.243.30.87" )
+    port = 5000  # socket server port number
 
-    client_socket = socket.socket()  # Istanzia il socket
-    client_socket.connect((host, port))  # Connetti al server
+    client_socket = socket.socket()  # instantiate
+    client_socket.connect((host, port))  # connect to the server
 
-    # Richiedi due variabili intere all'utente
-    x = int(input("Inserisci il valore di x: "))
-    y = int(input("Inserisci il valore di y: "))
+    message = input(" -> ")  # take input
 
-    # Impacchetta le due variabili intere in un formato binario usando struct
-    message = struct.pack('ii', x, y)
+    while message.lower().strip() != 'bye': 
+        client_socket.send(message.encode())  # send message
+        # data = client_socket.recv(1024).decode()  # receive response
 
-    # Invia le variabili impacchettate al server
-    client_socket.send(message)
+        # print('Received from server: ' + data)  # show in terminal
 
-    # # Attendi la risposta dal server (opzionale)
-    # data = client_socket.recv(1024)  # Ricevi i dati (fino a 1024 byte)
-    # result = struct.unpack('i', data)[0]  # Decodifica l'intero ricevuto
+        message = input(" -> ")  # again take input
 
-    # print(f"Risultato ricevuto dal server: {result}")  # Mostra il risultato
-
-    client_socket.close()  # Chiudi la connessione
+    client_socket.close()  # close the connection
 
 
-if __name__ == '__main__':
+if _name_ == '_main_':
     client_program()

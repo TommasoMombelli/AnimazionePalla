@@ -9,16 +9,19 @@ def client_program():
     client_socket = socket.socket()  # instantiate
     client_socket.connect((host, port))  # connect to the server
 
-    message = input(" -> ")  # take input
+    # message = input(" ciao ")  # take input
+    # il primo messagio devono essere le dimensioni della finestra del cellulare
 
-    while message.lower().strip() != 'bye':
-        client_socket.send(message.encode())  # send message
-        # data = client_socket.recv(1024).decode()  # receive response
-
-        # print('Received from server: ' + data)  # show in terminal
-
-        message = input(" -> ")  # again take input
-
+    while True:
+        # if message.lower().strip() != 'bye':
+         
+         x = int(input("Inserisci la coordinata X: "))
+         y = int(input("Inserisci la coordinata Y: "))
+        
+         # formatta il messaggio come una coppia di coordinate
+         message = f"({x}, {y})"
+         # message = input(" -> ")  # again take input
+         client_socket.send(message.encode())  # send message
     client_socket.close()  # close the connection
 
 

@@ -1,21 +1,25 @@
 import socket
 from tkinter import *
 import threading
-
+from basic_qrcode import qr_code
+from multiprocessing import Process
 
 def server_program():
     # get the hostname
     host = socket.gethostname()
     port = 5000  # initiate port no above 1024
-
     server_socket = socket.socket()  # get instance
     server_socket.bind((host, port))  # bind host address and port together
+
+    qr_process = Process(target=qr_code)
+    qr_process.start()
 
     # configure how many client the server can listen simultaneously
     server_socket.listen(1)
     conn, address = server_socket.accept()  # accept new connection
     print("Connection from: " + str(address))
-
+    qr_process.terminate()
+    qr_process.join()
     # Create the canvas and ball
     root = Tk()
     root.title("Ball Animation")
@@ -47,8 +51,8 @@ def server_program():
                 try:
                     data = data.strip("()")  # remove parentheses
                     x, y = data.split(",")   # split string by comma
-                    x = int(x)  # convert x to integer
-                    y = int(y)  # convert y to integer
+                    x = float(x)  # convert x to integer
+                    y = float(y)  # convert y to integer
 
                 except ValueError:
                     print("Errore: formato delle coordinate non valido")

@@ -1,4 +1,5 @@
 import socket
+import json
 
 
 def client_program():
@@ -9,8 +10,6 @@ def client_program():
     client_socket = socket.socket()  # instantiate
     client_socket.connect((host, port))  # connect to the server
 
-    # message = input(" ciao ")  # take input
-    # il primo messagio devono essere le dimensioni della finestra del cellulare
 
     while True:
         # if message.lower().strip() != 'bye':
@@ -18,9 +17,11 @@ def client_program():
          x = int(input("Inserisci la coordinata X: "))
          y = int(input("Inserisci la coordinata Y: "))
         
-         # formatta il messaggio come una coppia di coordinate
-         message = f"({x}, {y})"
-         # message = input(" -> ")  # again take input
+         # Create a dictionary with the coordinates
+         coordinates = {"x": x, "y": y}
+    
+         # Convert the dictionary to a JSON string
+         message = json.dumps(coordinates)
          client_socket.send(message.encode())  # send message
     client_socket.close()  # close the connection
 

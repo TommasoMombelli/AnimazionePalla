@@ -1,5 +1,4 @@
 import socket
-from tkinter import Image
 import segno
 import io
 import matplotlib.pyplot as plt

@@ -46,10 +46,15 @@ def server_program():
     # calcolo dei fattori di scala per adattare le dimensioni 
     kx, ky= receive_dimensions(conn, screen_width-dim_ball, screen_height-dim_ball)
 
+    # funzione per chiudere la finestra tkinter quando la connessione sarà chiusa
+    def close_window():
+       root.destroy()
+    
     # apertura del thread per la ricezione dei dati
-    receive_thread = threading.Thread(target=receive_data, args=(conn, ball, kx,ky))
+    receive_thread = threading.Thread(target=receive_data, args=(conn, ball, kx,ky,close_window))
     receive_thread.daemon = True  
     receive_thread.start()
+
 
     # loop che tiene aperta la finestra tkinter
     root.mainloop()
@@ -57,3 +62,4 @@ def server_program():
 
 if __name__ == '__main__':
     server_program()
+

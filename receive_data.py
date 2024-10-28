@@ -1,7 +1,8 @@
 import json
 from tkinter import *
 
-def receive_data(conn, ball, kx, ky):
+def receive_data(conn, ball, kx, ky, close_window):
+        closed=False
         data_splitted = []
         while True:
             try:
@@ -9,6 +10,8 @@ def receive_data(conn, ball, kx, ky):
                 data = conn.recv(8000).decode()
 
                 if not data:
+                    close_window()
+                    print("Connessione chiusa")
                     break
                 
                 #separazione delle coordinate in base al carattere ";" e rimozione degli elementi vuoti
@@ -25,7 +28,13 @@ def receive_data(conn, ball, kx, ky):
                         print(f"X={x}, Y={y}")
                     
                     # gestione dell'eccezione in caso di formato delle coordinate non valido
+                    # chiusura della connessione quando arriva la stringa "close"
                     except ValueError:
+                        if data == "close":
+                            close_window()
+                            print("Connessione chiusa")
+                            closed=True
+                            break
                         print("Errore: formato delle coordinate non valido")
                         continue
                     
@@ -34,11 +43,17 @@ def receive_data(conn, ball, kx, ky):
             
             # gestione dell'eccezione in caso di errore durante la ricezione dei dati
             except Exception as e:
-                print(f"Errore durante la ricezione dei dati: {e}")
-                break
+                if closed:
+                    break
+                else:
+                    print(f"Errore durante la ricezione dei dati: {e}")
+                    break
 
-        # chiusura della connessione
-        conn.close()  
+        # chiusura della connessione in caso non arrivino più dati
+        conn.close()
+        close_window()
+        print("Connessione chiusa")  
+        
 
 
 def receive_dimensions(conn, screen_width, screen_height):
@@ -55,6 +70,3 @@ def receive_dimensions(conn, screen_width, screen_height):
     ky=screen_height/y
     return kx,ky
 
-
-     
-     

@@ -1,6 +1,5 @@
 import json
 from tkinter import *
-
 def receive_data(conn, ball, kx, ky, close_window):
         closed=False
         data_splitted = []
@@ -9,17 +8,31 @@ def receive_data(conn, ball, kx, ky, close_window):
                 # recezione dei dati, di dimensione massima 8000 byte, dal client
                 data = conn.recv(8000).decode()
 
-                if not data:
-                    close_window()
-                    print("Connessione chiusa")
-                    break
+                # if not data:
+                #     closed=True
+                #     print("Connessione chiusa perchè non arrivano più dati")
+                #     close_window()
+                    
+                    #handle_disconnection(server_socket);
+                    #server_program() 
+                    # break
                 
                 #separazione delle coordinate in base al carattere ";" e rimozione degli elementi vuoti
                 data_splitted=data.split(";")
-                data_splitted.remove('')
+                if '' in data_splitted:
+                  data_splitted.remove('')
 
 
                 for data in data_splitted:
+                    # chiusura della connessione quando arriva la stringa "close"
+                    
+                    
+                    if data == 'close': 
+                        closed=True
+                        print("Connessione chiusa perchè ricevuto 'close'")  
+                        close_window()
+                    
+                        break
                     try:
                         # conversione delle coordinate in un Json
                         coordinates = json.loads(data)
@@ -28,13 +41,7 @@ def receive_data(conn, ball, kx, ky, close_window):
                         print(f"X={x}, Y={y}")
                     
                     # gestione dell'eccezione in caso di formato delle coordinate non valido
-                    # chiusura della connessione quando arriva la stringa "close"
                     except ValueError:
-                        if data == "close":
-                            close_window()
-                            print("Connessione chiusa")
-                            closed=True
-                            break
                         print("Errore: formato delle coordinate non valido")
                         continue
                     
@@ -46,14 +53,16 @@ def receive_data(conn, ball, kx, ky, close_window):
                 if closed:
                     break
                 else:
-                    print(f"Errore durante la ricezione dei dati: {e}")
+                    print(f"Errore durante la ricezione dei dati: {e}") 
                     break
 
-        # chiusura della connessione in caso non arrivino più dati
-        conn.close()
-        close_window()
-        print("Connessione chiusa")  
         
+         # chiusura della connessione in caso non arrivino più dati
+        if not closed:
+           print("Connessione chiusa perchè non arrivano più dati")  
+           close_window()
+        
+            
 
 
 def receive_dimensions(conn, screen_width, screen_height):
@@ -69,4 +78,7 @@ def receive_dimensions(conn, screen_width, screen_height):
     kx=screen_width/x
     ky=screen_height/y
     return kx,ky
+
+
+
 

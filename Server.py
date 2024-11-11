@@ -1,23 +1,20 @@
 import socket
 from tkinter import *
 import threading
+# from tkinter import messagebox
 from generate_qrcode import qr_code
-from receive_data import receive_data
+from receive_data import receive_data, receive_dimensions
 from multiprocessing import Process
 from Ball import Ball
-from receive_data import receive_dimensions
-import time
 
 dim_ball = 40
 def server_program():
 
     # funzione per chiudere la finestra tkinter quando la connessione sarà chiusa
-    def close_window():
+    def close_window():  
         root.destroy()
         root.quit()
         
-
-    
     # definizione dell'host e della porta
     host = socket.gethostname()
     port = 5000 
@@ -44,14 +41,10 @@ def server_program():
             qr_process.join()
             break
 
-        
-        
         # terminazione del processo che genera il qr code doppo che la 
         # connessione è stata stabilita
         qr_process.terminate()
         qr_process.join()
-        
-        
 
         # Creazione della finestra principale di Tkinter
         root = Tk()
@@ -72,8 +65,6 @@ def server_program():
         receive_thread.daemon = True  
         receive_thread.start()
         
-        
-
         # loop che tiene aperta la finestra tkinter
         root.mainloop()
 
@@ -82,7 +73,8 @@ if __name__ == '__main__':
 
 
 
-
+# metti video dietro la pallina di una webcam
+# pallina blu fissa nello schermo: quando muovendo quella rossa raggiungo quella blu ho raggiunto l'obiettivo e si ferma
 
 
 

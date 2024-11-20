@@ -12,12 +12,13 @@ def client_program():
     client_socket.connect((host, port))  # connect to the server
        
     # Send screen dimensions to the server
-    screen_dimensions = {"x": 1536, "y": 864}
+    screen_dimensions = {"x": 1920, "y": 1080}
     client_socket.send(json.dumps(screen_dimensions).encode())
 
     try:
         while True:
-            
+            data = client_socket.recv(1024).decode()
+            print('Received from server: ' + data)
             # Get user input
             user_input = input("Enter coordinates as 'x,y' or type 'close' to end: ")
 
@@ -50,3 +51,7 @@ def client_program():
 
 if __name__ == '__main__':
     client_program()
+    
+    
+    
+    

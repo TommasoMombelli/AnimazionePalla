@@ -5,14 +5,14 @@ from tkinter import *
 import time 
 
 
-def receive_data(conn, ball: Ball, kx, ky):
+def receive_data(conn, ball: Ball, kx, ky,screen_width, screen_height):
+    
     delta=5
     data_splitted = []
-    screen_width, screen_height = ball.get_screen_dims()
+    
     x_c = screen_width/2
     y_c = screen_height/2
     
-    # print(f"X_c={x_c}, Y_c={y_c}")
     while ball.running:   
         try:
             # recezione dei dati, di dimensione massima 8000 byte, dal client
@@ -37,8 +37,8 @@ def receive_data(conn, ball: Ball, kx, ky):
                     y = coordinates['y']
                     print(f"X={x}, Y={y}")
                     
+                    # controllo se le coordinate ricevute sono vicine al centro della schermata
                     if x*kx > x_c-delta and x*kx < x_c+delta and y*ky > y_c-delta and y*ky < y_c+delta:
-                        #ball.move_ball(x*kx,y*ky)
                         ball.update_coords(floor(x*kx), floor(y*ky))
                         print("Contact detected, closing connection")
                         conn.send("winner".encode())
@@ -53,7 +53,6 @@ def receive_data(conn, ball: Ball, kx, ky):
                     continue
                 
                 # spostamento della palla alle coordinate ricevute
-                
                 ball.update_coords(floor(x*kx), floor(y*ky))
         
         # gestione dell'eccezione in caso di errore durante la ricezione dei dati
@@ -67,15 +66,13 @@ def receive_data(conn, ball: Ball, kx, ky):
     if not ball.is_running():
         print("Connessione chiusa perchè non arrivano più dati")  
 
-
+# recezione delle dimensioni dello schermo del client
 def receive_dimensions(conn, screen_width, screen_height):
-    # recezione delle dimensioni dello schermo del client
     data=conn.recv(8000).decode()
     dimensions=json.loads(data)
     x = dimensions['x']
     y = dimensions['y']
     print(f"Received dimensions: width={x}, height={y}")
-    
     # calcolo dei fattori di scala per adattare le dimensioni dello schermo del
     # client (cellulare) a quelle del pc
     kx=screen_width/x

@@ -57,7 +57,7 @@ def server_program():
         #funzione per la creazione del popup per la scelta dello sfondo
         def ask_question():
 
-            window = ctk.CTk()  # Usa CTk anziché Tk
+            window = ctk.CTk()  
             window.title("Domanda")
             window.geometry("400x200")
             window.config(bg="#f5f5f5")
@@ -87,14 +87,14 @@ def server_program():
             button_frame = ctk.CTkFrame(window ,fg_color="#f5f5f5", bg_color="white")
             button_frame.pack()
 
-            # Pulsanti arrotondati
+            #Caratteristiche pulsanti
             yes_button = ctk.CTkButton(
                 button_frame, 
                 text="Sì", 
                 command=on_yes, 
                 fg_color="#00bcdc", 
                 text_color="#f5f5f5", 
-                corner_radius=15,  # Arrotondamento
+                corner_radius=15,  
                 width=100, 
                 height=40, 
                 font=("Lora", 12)
@@ -105,7 +105,7 @@ def server_program():
                 command=on_no, 
                 fg_color="#00bcdc", 
                 text_color="#f5f5f5", 
-                corner_radius=15,  # Arrotondamento
+                corner_radius=15,  
                 width=100, 
                 height=40, 
                 font=("Lora", 12)
@@ -129,10 +129,9 @@ def server_program():
 
         # calcolo dei fattori di scala per adattare le dimensioni 
         kx, ky= receive_dimensions(conn, screen_width-r_ball, screen_height-r_ball)
-        print(f"kx: {kx}, ky: {ky}")
-        
+               
         # apertura del thread per la ricezione dei dati
-        receive_thread = threading.Thread(target=receive_data, args=(conn, ball, kx,ky))
+        receive_thread = threading.Thread(target=receive_data, args=(conn, ball, kx,ky, screen_width, screen_height))
         receive_thread.daemon = True  
         receive_thread.start()
         

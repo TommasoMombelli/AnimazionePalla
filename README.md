@@ -30,7 +30,7 @@ Questo software genera un QrCode che mostra l'indirizzo IP del Server e permette
    ```bash
    remote_ball\Scripts\activate.bat
    ```
-  NB: oppure al posto di remote_ball il nome dato all'environment
+   NB: oppure al posto di remote_ball il nome dato all'environment
 
 5. installare i pacchetti python necessari:
    ```bash

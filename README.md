@@ -1,7 +1,7 @@
-# Project Name: **AwesomeApp**
+# installazione del software python: Server
 
-## Description
-AwesomeApp is a simple and elegant web application built with React.js that helps users manage their tasks and stay organized. It allows users to create, edit, and delete tasks, as well as mark them as completed.
+## Descrizione
+Questo software genera un QrCode che mostra l'indirizzo IP del Server e permette la connessione del client (app flutter). Inoltre legge le coordinate della posizione inviate dal client e permette il movimento della pallina mostrando quando viene vinto il "gioco". 
 
 ## Features
 - Add, edit, and delete tasks

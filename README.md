@@ -13,4 +13,4 @@ Questo software genera un QrCode che mostra l'indirizzo IP del Server e permette
 ### Steps
 1. Clone the repository:
    ```bash
-   git clone https://github.com/username/awesomeapp.git
+   git clone https://github.com/TommasoMombelli/AnimazionePalla.git

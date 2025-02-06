@@ -70,8 +70,15 @@ def receive_data(conn, ball: Ball, kx, ky,screen_width, screen_height):
 def receive_dimensions(conn, screen_width, screen_height):
     data=conn.recv(8000).decode()
     dimensions=json.loads(data)
-    x = dimensions['x']
-    y = dimensions['y']
+    if(dimensions['x'] == 0):
+        x = 400
+    else:
+        x = dimensions['x']
+    if(dimensions['y'] == 0):
+        y = 800
+    else:
+        y = dimensions['y']
+        
     print(f"Received dimensions: width={x}, height={y}")
     # calcolo dei fattori di scala per adattare le dimensioni dello schermo del
     # client (cellulare) a quelle del pc

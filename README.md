@@ -39,4 +39,6 @@ Questo software genera un QrCode che mostra l'indirizzo IP del Server e permette
 6. lanciare il programma:
    ```bash
    python Server.py
+
+Per lanciare l'applicazione dopo l'installazione ripetere i punti 2. 4. 6.
    
